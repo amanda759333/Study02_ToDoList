@@ -117,19 +117,20 @@ function startEdit(id) {
   render();
 }
 
-function cancelEdit() {
+// 수정 모드를 닫는다. 키보드나 버튼으로 닫을 때는 [수정] 버튼으로 포커스를 돌려준다.
+function cancelEdit(id, restoreFocus) {
   editingId = null;
   render();
+  if (restoreFocus) focusItemControl(id, "edit");
 }
 
 // 입력값이 비어 있으면 원래 내용을 그대로 두고 수정 모드만 닫는다.
-function commitEdit(li) {
+function commitEdit(li, restoreFocus) {
   const id = li.dataset.id;
   const text = li.querySelector(".edit-text").value.trim();
   const category = li.querySelector(".edit-category").value;
-  editingId = null;
   if (text) updateTodo(id, text, category);
-  render();
+  cancelEdit(id, restoreFocus);
 }
 
 // ---------- 렌더링 ----------
@@ -282,7 +283,21 @@ function renderFilters() {
   filtersEl.replaceChildren(...buttons);
 }
 
+// 목록을 다시 그리면 포커스가 사라지므로, 같은 항목의 같은 컨트롤로 포커스를 되돌린다.
+function focusItemControl(id, action) {
+  for (const li of listEl.children) {
+    if (li.dataset.id !== id) continue;
+    const control = li.querySelector("[data-action='" + action + "']");
+    if (control) control.focus();
+  }
+}
+
 function render() {
+  const active = document.activeElement;
+  const focused =
+    active && listEl.contains(active) && active.dataset.action
+      ? { id: active.closest("li").dataset.id, action: active.dataset.action }
+      : null;
   renderProgress();
   renderFilters();
   const visible = getVisibleTodos();
@@ -303,6 +318,8 @@ function render() {
       input.focus();
       input.select();
     }
+  } else if (focused) {
+    focusItemControl(focused.id, focused.action);
   }
 }
 
@@ -327,8 +344,8 @@ listEl.addEventListener("click", (event) => {
   switch (button.dataset.action) {
     case "delete": deleteTodo(li.dataset.id); break;
     case "edit": startEdit(li.dataset.id); break;
-    case "save": commitEdit(li); break;
-    case "cancel": cancelEdit(); break;
+    case "save": commitEdit(li, true); break;
+    case "cancel": cancelEdit(li.dataset.id, true); break;
   }
 });
 
@@ -347,9 +364,9 @@ listEl.addEventListener("keydown", (event) => {
   if (!li || event.isComposing) return;
   if (event.key === "Enter") {
     event.preventDefault();
-    commitEdit(li);
+    commitEdit(li, true);
   } else if (event.key === "Escape") {
-    cancelEdit();
+    cancelEdit(li.dataset.id, true);
   }
 });
 
@@ -358,7 +375,7 @@ listEl.addEventListener("focusout", (event) => {
   if (editingId === null) return;
   const li = event.target.closest("li.editing");
   if (!li || li.contains(event.relatedTarget)) return;
-  commitEdit(li);
+  commitEdit(li, false);
 });
 
 // ---------- 시작 ----------
