@@ -46,6 +46,54 @@ body {
   color: var(--danger);
 }
 
+.progress {
+  margin-bottom: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.2s;
+}
+
+.progress-categories {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.progress-done {
+  margin: 8px 0 0;
+  color: var(--personal);
+  font-weight: 600;
+}
+
+.empty-message {
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--muted);
+}
+
+[hidden] { display: none !important; }
+
 .add-form {
   display: flex;
   gap: 8px;

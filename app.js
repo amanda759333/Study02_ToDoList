@@ -16,7 +16,9 @@ const warningEl = document.getElementById("storage-warning");
 const formEl = document.getElementById("add-form");
 const inputEl = document.getElementById("todo-input");
 const categoryEl = document.getElementById("category-select");
+const progressEl = document.getElementById("progress");
 const filtersEl = document.getElementById("filters");
+const emptyEl = document.getElementById("empty-message");
 const listEl = document.getElementById("todo-list");
 
 // ---------- 저장 ----------
@@ -214,6 +216,58 @@ function createEditItem(todo) {
   return li;
 }
 
+// DOM을 건드리지 않고 숫자만 계산한다. 필터와 무관하게 항상 전체 기준이다.
+function getProgress() {
+  const total = todos.length;
+  const done = todos.filter((t) => t.done).length;
+  const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+  const byCategory = Object.keys(CATEGORY_LABELS).map((name) => {
+    const items = todos.filter((t) => t.category === name);
+    return { name, total: items.length, done: items.filter((t) => t.done).length };
+  });
+  return { total, done, percent, byCategory };
+}
+
+function renderProgress() {
+  const { total, done, percent, byCategory } = getProgress();
+
+  const title = document.createElement("span");
+  title.textContent = "전체 진행률";
+  const count = document.createElement("span");
+  count.className = "progress-count";
+  count.textContent = done + " / " + total + " (" + percent + "%)";
+  const head = document.createElement("div");
+  head.className = "progress-head";
+  head.append(title, count);
+
+  const fill = document.createElement("div");
+  fill.className = "progress-fill";
+  fill.style.width = percent + "%";
+  const bar = document.createElement("div");
+  bar.className = "progress-bar";
+  bar.setAttribute("role", "progressbar");
+  bar.setAttribute("aria-label", "전체 진행률");
+  bar.setAttribute("aria-valuemin", "0");
+  bar.setAttribute("aria-valuemax", "100");
+  bar.setAttribute("aria-valuenow", String(percent));
+  bar.append(fill);
+
+  const categories = document.createElement("p");
+  categories.className = "progress-categories";
+  categories.textContent = byCategory
+    .map((c) => CATEGORY_LABELS[c.name] + " " + c.done + "/" + c.total)
+    .join(" · ");
+
+  const children = [head, bar, categories];
+  if (total > 0 && done === total) {
+    const message = document.createElement("p");
+    message.className = "progress-done";
+    message.textContent = "오늘 할 일을 모두 끝냈어요 🎉";
+    children.push(message);
+  }
+  progressEl.replaceChildren(...children);
+}
+
 function renderFilters() {
   const buttons = FILTERS.map((name) => {
     const count = name === "all" ? todos.length : todos.filter((t) => t.category === name).length;
@@ -229,12 +283,20 @@ function renderFilters() {
 }
 
 function render() {
+  renderProgress();
   renderFilters();
+  const visible = getVisibleTodos();
   listEl.replaceChildren(
-    ...getVisibleTodos().map((todo) =>
+    ...visible.map((todo) =>
       todo.id === editingId ? createEditItem(todo) : createTodoItem(todo)
     )
   );
+  listEl.hidden = visible.length === 0;
+  emptyEl.hidden = visible.length > 0;
+  emptyEl.textContent =
+    todos.length === 0
+      ? "아직 할 일이 없어요. 위에서 추가해 보세요."
+      : "이 카테고리에는 할 일이 없어요.";
   if (editingId) {
     const input = listEl.querySelector(".edit-text");
     if (input) {
