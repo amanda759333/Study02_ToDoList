@@ -33,6 +33,99 @@ body {
   padding: 16px;
 }
 
+.app-header h1 {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+}
+
+.warning {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #fdecea;
+  color: var(--danger);
+}
+
+.add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.add-form input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+
+input[type="text"],
+select,
+button {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.add-form button {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+
+.todo-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.todo-item:last-child { border-bottom: 0; }
+
+.todo-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.todo-item.done .todo-text {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.badge {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.badge-work { color: var(--work); background: var(--work-bg); }
+.badge-personal { color: var(--personal); background: var(--personal-bg); }
+.badge-study { color: var(--study); background: var(--study-bg); }
+
+.btn-small {
+  flex: none;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.btn-delete { color: var(--danger); }
+
 .visually-hidden {
   position: absolute;
   width: 1px;
