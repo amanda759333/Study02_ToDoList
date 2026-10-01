@@ -1,0 +1,43 @@
+/* 작성일시: 2026-10-01 11:29 (KST) */
+
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --text: #1f2430;
+  --muted: #5d6573;
+  --border: #d9dde3;
+  --accent: #2459d6;
+  --accent-text: #ffffff;
+  --danger: #b3261e;
+  --work: #1d4fb8;
+  --work-bg: #e3ecfd;
+  --personal: #17692f;
+  --personal-bg: #def3e4;
+  --study: #6b2fb3;
+  --study-bg: #efe5fb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+  line-height: 1.4;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
