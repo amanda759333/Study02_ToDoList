@@ -75,6 +75,30 @@ button {
   cursor: pointer;
 }
 
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.filter-tab {
+  cursor: pointer;
+}
+
+.filter-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.todo-item.editing input[type="text"] {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-edit { color: var(--accent); }
+
 .todo-list {
   margin: 0;
   padding: 0;
